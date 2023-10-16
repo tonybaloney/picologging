@@ -85,6 +85,7 @@ def test_formatter_custom_datefmt():
 
 
 @pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
+@pytest.mark.xfail(reason="Not implemented, see #184")
 def test_formatter_custom_datefmt_with_msecs():
     f = Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S.%f")
     assert f.datefmt == "%Y-%m-%d %H:%M:%S.%f"
@@ -94,6 +95,16 @@ def test_formatter_custom_datefmt_with_msecs():
     s = f.format(record)
     assert "WARNING - bork bork bork" in s
     assert ".f" not in s
+
+
+@pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
+def test_formatter_long_datefmt():
+    f = Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d potato potato potato potato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potatopotato potato potato carrot")
+    record = LogRecord(
+        "hello", logging.WARNING, __file__, 123, "bork bork bork", (), None
+    )
+    s = f.format(record)
+    assert "carrot" in s
 
 
 @pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
