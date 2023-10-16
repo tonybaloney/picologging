@@ -75,13 +75,25 @@ def test_formatter_default_fmt_exc_info_against_builtin():
 
 @pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
 def test_formatter_custom_datefmt():
-    f = Formatter("%(name)s %(levelname)s %(message)s", datefmt="%Y-%m-%d")
+    f = Formatter("%(asctime)s %(name)s %(levelname)s %(message)s", datefmt="%Y-%m-%d")
     assert f.datefmt == "%Y-%m-%d"
     record = LogRecord(
         "hello", logging.WARNING, __file__, 123, "bork bork bork", (), None
     )
     s = f.format(record)
-    assert s == "hello WARNING bork bork bork"
+    assert "WARNING bork bork bork" in s
+
+
+@pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
+def test_formatter_custom_datefmt_with_msecs():
+    f = Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S.%f")
+    assert f.datefmt == "%Y-%m-%d %H:%M:%S.%f"
+    record = LogRecord(
+        "hello", logging.WARNING, __file__, 123, "bork bork bork", (), None
+    )
+    s = f.format(record)
+    assert "WARNING - bork bork bork" in s
+    assert ".f" not in s
 
 
 @pytest.mark.limit_leaks("192B", filter_fn=filter_gc)
