@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.15...3.30)
 
 option(COVERAGE "Enable coverage reporting" OFF)
 option(CACHE_FILEPATH "Enable cache filepath" ON)
-project(picologging)
+project(${SKBUILD_PROJECT_NAME})
 
 find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
@@ -44,4 +44,4 @@ if(FUZZING)
     target_link_options(_picologging PRIVATE -fsanitize=address,fuzzer)
 endif(FUZZING)
 
-install(TARGETS _picologging LIBRARY DESTINATION src/picologging)
+install(TARGETS _picologging LIBRARY DESTINATION ${SKBUILD_PROJECT_NAME})
