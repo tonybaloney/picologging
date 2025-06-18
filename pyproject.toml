@@ -1,11 +1,11 @@
 [build-system]
 requires = [
     "setuptools>=65.4.1",
-    "scikit-build>=0.18.0",
+    "scikit-build-core",
     "cmake>=3.18",
     "ninja",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "scikit_build_core.build"
 
 [project]
 name = "picologging"
