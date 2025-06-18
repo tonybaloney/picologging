@@ -27,7 +27,6 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install requirements and package
       run: |
-        python -m pip install -U scikit-build
         python -m pip install -v .[dev]
 
     - name: Run pytest
